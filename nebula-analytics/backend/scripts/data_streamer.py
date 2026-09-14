@@ -9,6 +9,12 @@ async def stream_data_channels():
     url = "http://192.168.0.230:8000/api/v1/ingest"
     tick = 0
     
+    # 🔐 Security headers for API authentication
+    headers = {
+        "X-Nexus-API-Key": "dev_fallback_key_9876",
+        "Content-Type": "application/json"
+    }
+    
     async with httpx.AsyncClient() as client:
         while True:
             tick += 1
@@ -43,12 +49,47 @@ async def stream_data_channels():
                 {"vertical": "cyber", "entity": "PROXY_NODE_01", "metric_name": "network_ingress", "value": round(c_ing, 2), "vector_skew": 0.0}
             ]
 
+            # --- 4. ENTERPRISE ERP CHANNELS ---
+            # The Math: Simulate standard department procurement costs
+            base_capital = random.uniform(50000.0, 120000.0)
+            
+            # Tax is usually a stable bracket (15% - 22%)
+            tax_rate = random.uniform(0.15, 0.22)
+            
+            # 🎲 5% chance of a massive financial anomaly (fraud / unapproved spend)
+            if random.random() < 0.05:
+                base_capital *= random.uniform(3.0, 5.0)  # Massive unapproved budget spend
+                tax_rate *= random.uniform(0.05, 0.10)    # Highly irregular tax logging
+
+            tax_liability = base_capital * tax_rate
+
+            enterprise_payload = [
+                {
+                    "vertical": "enterprise_erp", 
+                    "entity": "Dept_01_PROCUREMENT", 
+                    "metric_name": "net_capital_impact", 
+                    "value": round(base_capital, 2), 
+                    "vector_skew": 0.0
+                },
+                {
+                    "vertical": "enterprise_erp", 
+                    "entity": "Dept_01_PROCUREMENT", 
+                    "metric_name": "tax_liability_variance", 
+                    "value": round(tax_liability, 2), 
+                    "vector_skew": 0.0
+                }
+            ]
+            # Make sure you actually append this to your main request array!
+            # e.g., full_payload.extend(enterprise_payload)
+
+
             try:
-                # Fire the exact compliant array definitions concurrently
+                # Fire the exact compliant array definitions concurrently with security headers
                 await asyncio.gather(
-                    client.post(url, json=fintech_payload),
-                    client.post(url, json=industrial_payload),
-                    client.post(url, json=cyber_payload)
+                    client.post(url, json=fintech_payload, headers=headers),
+                    client.post(url, json=industrial_payload, headers=headers),
+                    client.post(url, json=cyber_payload, headers=headers),
+                    client.post(url, json=enterprise_payload, headers=headers)
                 )
                 print(f"📡 Tick {tick:03d} // Broadcaster Synced Cluster // 201 Created Ingest Clear")
             except Exception as e:

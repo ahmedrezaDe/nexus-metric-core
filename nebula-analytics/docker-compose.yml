@@ -46,6 +46,9 @@ services:
     container_name: nexus-frontend
     ports:
       - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://192.168.0.230:8000
+      - NEXT_PUBLIC_WS_URL=ws://192.168.0.230:8000
     networks:
       - nexus-mesh
     depends_on:

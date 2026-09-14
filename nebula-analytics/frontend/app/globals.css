@@ -1,10 +1,10 @@
 @import "tailwindcss"; 
 
 :root {
-  --background: #090a0f; /* Premium midnight dark */
-  --foreground: #f3f4f6;
-  --card-bg: #121420;     /* Elevated dashboard card container tint */
-  --card-border: #1e2235;
+  --background: #10131c; /* Premium midnight dark */
+  --foreground: #0f070d;
+  --card-bg: #000000;     /* Elevated dashboard card container tint */
+  --card-border: #001167;
   --neon-emerald: #10b981; /* Healthy data ticker indicator */
   --neon-crimson: #ef4444; /* Critical Anomaly Alert accent */
   --neon-amber: #f59e0b;   /* Processing/Warning indicator */

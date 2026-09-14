@@ -33,6 +33,13 @@ class InsightGenerator:
                 "Apply raw cyber-forensics phrasing (e.g., volumetric ingress surge, packet fragmentation skew, edge routing "
                 "exhaustion, stateful firewall degradation, cryptographic handshake timeout, perimeter proxy telemetry drift). "
                 "Vary your analytical focus per report. Write exactly 2 sentences."
+            ),
+            # ⚡ ADD THIS ERP PERSONA
+            "enterprise_erp": (
+                "You are an Enterprise Risk & Compliance Auditor AI."
+                "Analyze this SAP ERP ledger anomaly. The system detected an irregular multi-variable skew between"
+                "'net_capital_impact' and 'tax_liability_variance' within a corporate procurement department."
+                "Provide a 2-sentence executive diagnostic indicating potential capital leakage, unapproved vendor capitalization, or compliance breaches."
             )
         }
         

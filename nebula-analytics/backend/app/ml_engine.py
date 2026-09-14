@@ -32,12 +32,19 @@ def detect_and_log_anomalies(db: Session, entity: str, vertical: str, lookback_r
         grouped[r.timestamp][r.metric_name] = r.value
 
     data_list = []
-    # Identify feature sets dynamically
+    
+    # ⚡ FIX: Added enterprise_erp to the mapping dictionary so it returns the correct tuple
     feature_keys = {
-        "fintech": ("market_price", "transaction_volume"),
+        "fintech": ("pricing_density_delta", "stream_velocity"),
         "industrial": ("hydraulic_pressure", "structural_vibration"),
-        "cyber": ("api_latency", "network_ingress")
+        "cyber": ("packet_ingress_latency", "volume_stream"),
+        "enterprise_erp": ("net_capital_impact", "tax_liability_variance") 
     }.get(vertical)
+
+    # Fallback to prevent server crashes if an unknown vertical is passed
+    if not feature_keys:
+        print(f"⚠️ [ML ENGINE WARNING] Unknown vertical passed to Isolation Forest: {vertical}")
+        return
 
     f1, f2 = feature_keys
 
@@ -54,6 +61,7 @@ def detect_and_log_anomalies(db: Session, entity: str, vertical: str, lookback_r
         return
 
     X = df[["feature_1", "feature_2"]].values
+    
     # 3. Fit Isolation Forest Unsupervised Model
     model = IsolationForest(contamination=0.05, random_state=42)
     model.fit(X)
@@ -65,7 +73,6 @@ def detect_and_log_anomalies(db: Session, entity: str, vertical: str, lookback_r
 
     if latest_frame["anomaly_marker"] == -1:
         # Prevent logging collision states by identifying linked elements across timestamps
-        # Locate the exact parent record to reference our relational ForeignKey mapping constraint
         parent_metric = db.query(MetricEntry).filter(
             MetricEntry.vertical == vertical,
             MetricEntry.entity == entity,
@@ -101,7 +108,7 @@ def detect_and_log_anomalies(db: Session, entity: str, vertical: str, lookback_r
                 ai_text_insight = ai_core.generate_executive_summary(context_payload, vertical=vertical)
                 print(f"✨ [AI TERMINAL] Diagnostic Generated:\n\"{ai_text_insight}\"\n")
 
-                # 4. Commit the text insight into the relational database
+                # 5. Commit the text insight into the relational database
                 insight_entry = AIInsight(
                     anomaly_id=new_anomaly.id,
                     content=ai_text_insight

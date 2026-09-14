@@ -45,3 +45,5 @@ next-env.d.ts
 __pycache__/
 .next/
 node_modules/
+CLAUDE.md
+AGENTS.md
