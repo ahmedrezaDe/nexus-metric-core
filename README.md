@@ -133,6 +133,10 @@ npm run dev
 
 ---
 
+## How it was built
+
+Designed and specified by me (Ahmed Reza). Much of the code was written with AI coding assistants, then reviewed, run and tested by me.
+
 ## Roadmap
 
 See [`ROADMAP.md`](./ROADMAP.md) for planned development phases.
