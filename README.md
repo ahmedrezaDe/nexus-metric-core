@@ -111,7 +111,7 @@ uvicorn app.main:app --reload
 
 ### 4. Start the local LLM server (optional)
 
-For local Mistral inference:
+For local Mistral inference, download `Mistral-7B-Instruct-v0.3.Q4_K_M.gguf` (about 4 GB, not included in this repository) into `backend/models/`:
 
 ```bash
 cd backend
